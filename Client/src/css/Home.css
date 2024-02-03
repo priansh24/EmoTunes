@@ -76,10 +76,9 @@
   display: flex;
   gap: 5vw;
 }
-.startbutton,
-.stopbutton {
-  width: 8vw;
-  height: 30px;
+.startbutton {
+  width: 10vw;
+  height: 50px;
   border: #0a9396 2px solid;
   border-radius: 5px;
   text-align: center;
@@ -94,8 +93,7 @@
   margin: 50px auto 60px;
 }
 
-.startbutton:hover,
-.stopbutton:hover {
+.startbutton:hover {
   background-color: #a2d2ff;
   color: aliceblue;
 }
@@ -119,8 +117,9 @@
 }
 
 #webcam-video {
-  justify-content: left;
+  justify-content: center;
   display: flex;
   /* border: 5px solid green; */
   height: 50vh;
+  margin: auto;
 }

@@ -4,7 +4,7 @@ nav {
 }
 .mainlogo {
   font-family: montserrat, "Kaisei HarunoUmi-Bold";
-  font-weight: bolder;
+  font-weight: 600;
   color: #111111;
   font-size: 32px;
   letter-spacing: 0px;
@@ -20,8 +20,8 @@ nav {
   margin-top: auto;
   margin-right: 9vw;
   display: flex;
-  gap: 5vw;
-  font-weight: bold;
+  gap: 6vw;
+  font-weight:  400;
   letter-spacing: 2px;
 }
 

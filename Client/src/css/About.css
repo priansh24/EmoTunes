@@ -1,0 +1,52 @@
+.allmem {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.mem1 {
+  justify-content: center;
+  align-items: center;
+  margin: 5vw auto 0 auto;
+  display: flex;
+  gap: 2vw;
+}
+.mem3 {
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  display: flex;
+  gap: 2vw;
+}
+.tarimg {
+  height: 45vh;
+  width: 24vw;
+  /* border: 2px white solid; */
+  border-radius: 10%;
+}
+.yagimg {
+  height: 45vh;
+  width: 24vw;
+  /* border: 2px white solid; */
+  border-radius: 10%;
+  /* background-size: contain; */
+}
+
+.tanimg {
+  height: 45vh;
+  width: 24vw;
+  /* border: 2px white solid; */
+  border-radius: 10%;
+  /* background-size: contain; */
+}
+
+.priimg {
+  height: 45vh;
+  width: 22vw;
+  /* border: 2px white solid; */
+  border-radius: 10%;
+  background-size: contain;
+  object-fit: contain;
+}
+p {
+  text-align: center;
+}

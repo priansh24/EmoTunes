@@ -1,27 +1,9 @@
-// WebcamComponent.js
-import React, { useRef } from 'react';
-import Webcam from 'react-webcam';
+import React from "react";
 
-const WebcamComponent = () => {
-  const webcamRef = useRef(null);
-
-  const capture = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    // You can use imageSrc for further processing or display.
-  };
-
+export default function Webcam() {
   return (
-    <div>
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        width={640}
-        height={480}
-      />
-      <button onClick={capture}>Capture Photo</button>
-    </div>
+    <>
+      <div>webcam</div>
+    </>
   );
-};
-
-export default WebcamComponent;
+}

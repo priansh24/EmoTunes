@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../css/Home.css";
 import heroimage from "../images/heroimage.svg";
-import Webcam from "./webcam";
+import blueheadphones from "../images/blueheadphones.svg";
+import rectangle from "../images/rectangle1.svg";
 import smilingimage from "../images/youngsmile.svg";
+import { requestWebcamPermission } from "./index.js";
 export default function Home() {
-  const startingcamera = () => {
-    <Webcam />;
-  };
+  useEffect(() => {
+    // Call the imported function
+    requestWebcamPermission();
+  }, []);
+
+  const stopcamera = () => {};
   return (
     <>
       <div className="content">
@@ -25,18 +30,26 @@ export default function Home() {
             soundtrack."
           </div>
         </div>
-        <img src={heroimage} alt="heroimage" className="theimage" />
+        <div className="heroimages">
+          <img src={rectangle} alt="" className="rectangle" />
+          <img src={blueheadphones} alt="heroimage" className="theimage" />
+        </div>
       </div>
       <div className="camera">
         <div className="smile">SMILE</div>
-        <div className="opencamera">Camera</div>
+        <div id="webcam-container">
+      <video id="webcam-video" autoPlay playsInline width="100%"></video>
+    </div>
 
         <div className="start">
-          <button className="startbutton" onClick={startingcamera}>
+          <button className="startbutton" onClick={requestWebcamPermission}>
             Start
           </button>
+          <button className="stopbutton" onClick={stopcamera}>
+            Stop
+          </button>
         </div>
-        {/* <div className="playlist">playlist will come here</div> */}
+        {/* <div className="playlist"></div> */}
       </div>
     </>
   );

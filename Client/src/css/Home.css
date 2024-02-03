@@ -1,5 +1,6 @@
 .content {
   display: flex;
+  margin-left: auto;
 }
 .text {
   display: flex;
@@ -14,11 +15,11 @@
   justify-content: space-between;
   gap: 20px;
   font-size: 52px;
-  font-weight: 700;
+  font-weight: 400;
 }
 .tagline2 {
   margin-top: 5vw;
-  line-height: 2.35vw;
+  line-height: 2.45vw;
   font-size: 19px;
 }
 .feel {
@@ -38,10 +39,6 @@
   align-self: start;
   flex-grow: 1;
 }
-.theimage {
-  width: 26vw;
-  margin: 5vw auto auto 16vw;
-}
 
 .camera {
   display: flex;
@@ -49,19 +46,24 @@
   margin: 10vw 7vw;
   border-radius: 25px;
   border: 1px white;
+  background: linear-gradient(
+    135deg,
+    rgba(120, 160, 205, 0.8) 0%,
+    rgba(161, 216, 221, 0.8) 100%
+  );
 }
 .smile {
   justify-content: center;
-  margin: auto;
-  font-family:montserrat, Kaisei Tokumin, sans-serif;
+  margin: 1vw auto;
+  font-family: montserrat, Kaisei Tokumin, sans-serif;
   font-weight: bold;
   font-size: 50px;
-  color: rgb(61, 61, 61);
+  color: rgb(74, 74, 74);
 }
 .opencamera {
   height: 300px;
   width: 700px;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   justify-content: center;
   margin: 2vw auto;
   border-radius: 12px;
@@ -71,8 +73,11 @@
   margin: 10px;
   justify-content: center;
   margin: auto;
+  display: flex;
+  gap: 5vw;
 }
-.startbutton {
+.startbutton,
+.stopbutton {
   width: 8vw;
   height: 30px;
   border: #0a9396 2px solid;
@@ -86,9 +91,36 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add a drop shadow */
   background-color: #0077b6;
   color: white;
+  margin: 50px auto 60px;
 }
 
-.startbutton:hover {
+.startbutton:hover,
+.stopbutton:hover {
   background-color: #a2d2ff;
   color: aliceblue;
+}
+.heroimages {
+  display: flex;
+  flex-direction: column;
+}
+.theimage {
+  width: 25vw;
+  margin: -28vw auto auto 11vw;
+}
+.rectangle {
+  width: 25.5vw;
+
+  margin: 6.5vw auto auto 16vw;
+}
+#webcam-container {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+}
+
+#webcam-video {
+  justify-content: left;
+  display: flex;
+  /* border: 5px solid green; */
+  height: 50vh;
 }

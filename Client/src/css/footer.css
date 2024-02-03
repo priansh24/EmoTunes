@@ -1,0 +1,15 @@
+footer {
+  background-color: #0077b6;
+  height: 12.5vh;
+}
+.centering {
+  display: flex;
+}
+.mainfooter {
+  color: #ffffff;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;
+  margin: auto;
+  font-size: 32px;
+}

@@ -1,0 +1,44 @@
+nav {
+  text-decoration: none;
+  display: flex;
+}
+.mainlogo {
+  font-family: montserrat, "Kaisei HarunoUmi-Bold";
+  font-weight: bolder;
+  color: #111111;
+  font-size: 32px;
+  letter-spacing: 0px;
+  line-height: normal;
+  margin-top: 10px;
+  flex: 1;
+  margin-left: 1.5vw;
+}
+.elements {
+  font-family: montserrat, Kaisei Tokumin, "Kaisei HarunoUmi-Medium";
+  font-size: 18px;
+  line-height: normal;
+  margin-top: auto;
+  margin-right: 9vw;
+  display: flex;
+  gap: 5vw;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.logo {
+  color: black;
+  letter-spacing: 5px;
+}
+.ele1,
+.ele2 {
+  color: #111111;
+}
+
+.ele1:hover,
+.ele2:hover {
+  color: #7209b7;
+}
+.ele1:active,
+.ele2:active {
+  color: #3a0ca3;
+}

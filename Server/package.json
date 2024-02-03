@@ -1,0 +1,19 @@
+{
+    "name": "emotunes",
+    "version": "1.0.0",
+    "description": "web app that analyses facial expressions (emotions) and recommends songs based on that emotion.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon src/server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "\"https://github.com/yagaykhatri19/Emotion-Based-Song-Prediction.git\""
+    },
+    "author": "Priyansh Singhal",
+    "license": "ISC",
+    "devDependencies": {
+        "nodemon": "^3.0.3"
+    }
+}

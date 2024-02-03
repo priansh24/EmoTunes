@@ -1,12 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv");
-// const fetch = require("node-fetch");
 const querystring = require("querystring");
 const cookieParser = require("cookie-parser");
 
 dotenv.config();
 const app = express();
-const PORT = 8000; // Change the port to 8000
+const PORT = 8000;
 
 app.use(cookieParser());
 
@@ -14,8 +13,7 @@ app.use(cookieParser());
 const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const redirectUri =
-  process.env.SPOTIFY_REDIRECT_URI ||
-  `http://localhost:${PORT}/spotify/callback`; // Adjust the Redirect URI
+  process.env.SPOTIFY_REDIRECT_URI || `http://localhost:${PORT}/callback`;
 
 // Store tokens globally (for demonstration purposes, you may want to use a database or secure storage in a production environment)
 let accessToken = null;
@@ -27,7 +25,7 @@ app.get("/login", (req, res) => {
     `https://accounts.spotify.com/authorize?${querystring.stringify({
       response_type: "code",
       client_id: clientId,
-      scope: "user-read-private",
+      scope: "user-read-private playlist-modify-private",
       redirect_uri: redirectUri,
     })}`
   );
@@ -36,7 +34,6 @@ app.get("/login", (req, res) => {
 // Callback endpoint to handle the response after user authorization
 app.get("/spotify/callback", async (req, res) => {
   const { code } = req.query;
-  //   console.log("CODE:", code);
 
   // Exchange the authorization code for an access token and refresh token
   const tokenResponse = await fetch("https://accounts.spotify.com/api/token", {
@@ -58,28 +55,25 @@ app.get("/spotify/callback", async (req, res) => {
   accessToken = tokenData.access_token;
   refreshToken = tokenData.refresh_token;
 
-  //   console.log("Access token: " + accessToken);
-  //   console.log("Refresh token: " + refreshToken);
-
   // Set cookies or store tokens securely in a production environment
   res.cookie("access_token", accessToken);
   res.cookie("refresh_token", refreshToken);
 
   res.send(
-    "Authorization successful! Tokens stored. You can now use /create-playlist endpoint to create a playlist."
+    "Authorization successful! Tokens stored. Use /create-playlist?emotion=happy to create a playlist."
   );
 });
 
-// Endpoint to demonstrate creating a playlist using the stored tokens
+// Endpoint to create a playlist based on the specified emotion
 app.get("/create-playlist", async (req, res) => {
+  const emotion = req.query.emotion;
+
   // Check if the access token is available
   if (!accessToken) {
     // If refresh token is available, attempt to refresh the access token
     if (refreshToken) {
       try {
         await refreshAccessToken();
-        // Retry creating the playlist after token refresh
-        return createPlaylist(res);
       } catch (error) {
         console.error("Error refreshing access token:", error);
         return res
@@ -92,14 +86,28 @@ app.get("/create-playlist", async (req, res) => {
     }
   }
 
-  // Access token is available, proceed to create the playlist
-  return createPlaylist(res);
+  try {
+    // Get songs based on the detected emotion using the Spotify API
+    const songs = await getSongsBasedOnEmotion(emotion);
+
+    // Create a playlist on Spotify
+    const playlistResponse = await createPlaylistOnSpotify(emotion);
+    const playlistId = playlistResponse.id;
+
+    // Add songs to the playlist
+    await addSongsToPlaylist(playlistId, songs);
+
+    res.json({ message: "Playlist created successfully!", playlistId });
+  } catch (error) {
+    console.error("Error creating playlist:", error);
+    res.status(500).json({ error: "Error creating playlist." });
+  }
 });
 
-// Endpoint to refresh the access token using the refresh token
-app.get("/refresh-token", async (req, res) => {
+// Function to refresh the access token using the refresh token
+async function refreshAccessToken() {
   if (!refreshToken) {
-    return res.status(400).json({ error: "Refresh token not available." });
+    throw new Error("Refresh token not available.");
   }
 
   // Exchange the refresh token for a new access token
@@ -123,17 +131,58 @@ app.get("/refresh-token", async (req, res) => {
   const refreshData = await refreshResponse.json();
   accessToken = refreshData.access_token;
 
-  // Update the access token in cookies or secure storage
-  res.cookie("access_token", accessToken);
+  // Update the access token in cookies or secure storage if needed
+  // res.cookie('access_token', accessToken);
 
-  res.json({ message: "Token refreshed successfully!", accessToken });
-});
+  return accessToken;
+}
 
-// Function to create a playlist using the stored access token
-async function createPlaylist(res) {
-  // Example: create a playlist
-  const playlistResponse = await fetch(
-    "https://api.spotify.com/v1/me/playlists",
+// Function to get songs based on the detected emotion using the Spotify API
+async function getSongsBasedOnEmotion(emotion) {
+  // You would typically use the Spotify API to search for tracks based on the detected emotion
+  // For simplicity, let's use some example track names and search for them
+
+  const exampleTrackNames = {
+    happy: ["Chiggy Wiggy", "Maharani", "Gulabo"],
+    sad: ["Aadat", "Gul", "tum ho"],
+  };
+
+  const trackNames = exampleTrackNames[emotion] || [];
+
+  // Search for the tracks on Spotify to obtain their IDs
+  const trackIds = await Promise.all(
+    trackNames.map(async (trackName) => {
+      const searchResponse = await fetch(
+        `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(
+          trackName
+        )}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const searchData = await searchResponse.json();
+
+      // Assume the first result is the desired track
+      const firstTrack = searchData.tracks.items[0];
+      return firstTrack ? firstTrack.id : null;
+    })
+  );
+
+  // Filter out null values (tracks that were not found)
+  return trackIds.filter((trackId) => trackId !== null);
+}
+
+// Function to create a playlist on Spotify
+async function createPlaylistOnSpotify(emotion) {
+  const playlistName = `Emotion Playlist - ${emotion}`;
+
+  const createPlaylistResponse = await fetch(
+    `https://api.spotify.com/v1/me/playlists`,
     {
       method: "POST",
       headers: {
@@ -141,19 +190,60 @@ async function createPlaylist(res) {
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
-        name: "Test1 Mehfil Coders",
-        description: "Created via Spotify API and Node.js backend!",
+        name: playlistName,
+        description: `Playlist created based on the emotion: ${emotion}`,
         public: false,
       }),
     }
   );
 
-  const playlistData = await playlistResponse.json();
+  return createPlaylistResponse.json();
+}
 
-  // Handle the playlist creation response
-  console.log("Playlist created:", playlistData);
+// Function to add songs to a playlist on Spotify
+async function addSongsToPlaylist(playlistId, songs) {
+  if (songs.length === 0) {
+    console.log("No songs to add to the playlist.");
+    return;
+  }
 
-  res.json({ message: "Playlist created successfully!", playlistData });
+  const addSongsResponse = await fetch(
+    `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        uris: songs.map((songId) => `spotify:track:${songId}`),
+      }),
+    }
+  );
+
+  return addSongsResponse.json();
+}
+
+async function getSpotifyTrackIdsByEmotion(emotion) {
+  const response = await fetch(
+    `https://api.spotify.com/v1/search?q=${emotion}&type=track&limit=10`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  console.log("Response: " + response);
+
+  const data = await response.json();
+  console.log("DATA:", data);
+
+  // Extract Spotify track IDs from the API response
+  const trackIds = data.tracks.items.map((item) => item.id);
+
+  return trackIds;
 }
 
 app.listen(PORT, () => {

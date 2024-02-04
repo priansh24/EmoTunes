@@ -18,3 +18,9 @@ We have used unsupervised learning to create a machine learning model where simi
 4. The top 50 similar songs are extracted based on cosine similarity.
 5. A playlist containing these 50 curated songs based on their facial emotion would be created in the user's Spotify account.
 
+## Front End the Website
+1. developed using react js and CSS
+2. The frontend act as a medium between user and server.
+3.  Front End offers two nav links namely EmoFind and About.
+4.  Emofind is a section where your face emotions are captured using your device's camera and a playlist is made in Spotify according to your mood
+5.  About us sections have information of Team memebers.

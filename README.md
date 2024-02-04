@@ -1,7 +1,7 @@
 # EmoTunes 
 This repository contains the code of our project EmoTunes that uses facial emotion recognition to curate a playlist of songs on Spotify that align with your emotions.
 
-The dataset used for this music recommendation is 'SpotifySongs.csv', which contains numerous audio features of Spotify songs.
+The dataset used for the music recommendation is 'SpotifySongs.csv', which contains numerous audio features of Spotify songs.
 We have used unsupervised learning to create a machine learning model where similar songs are grouped together on the basis of their audio features.
 ## Pre-processing
 1. The csv dataset is loaded into a Pandas DataFrame.
